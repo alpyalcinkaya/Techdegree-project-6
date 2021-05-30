@@ -16,6 +16,13 @@ let li = ol.children;
 
 let missed = 0;
 
+//Create reset buttons and append them to the overlay, button display is initially set to none
+const resetButton = document.createElement("a");
+    resetButton.className = "btn__reset";
+    resetButton.textContent = "Reset Game"
+    startOverlay.appendChild(resetButton);
+    resetButton.style.display = "none";
+
 //start game event listener - hides start overlay once start button is clicked
 
 startButton.addEventListener('click',() => {
@@ -89,11 +96,13 @@ function checkWin(){
     if(lettersTotal === correctTotal){
         startOverlay.className = "win";
         startOverlay.style.display = "flex";
+        resetButton.style.display = ""
         h2.textContent = "Congrats! You've won the game!"
 
     } else if (missed >= 5){
         startOverlay.className = "lose";
         startOverlay.style.display = "flex";
+        resetButton.style.display = ""
         h2.textContent = "Sorry, you've lost the game..."
     };
     startButton.textContent = "See results";
@@ -163,9 +172,16 @@ function resetPhrase(){
 
 //Function that resets the entire game;
 
-function resetGame(){
+
+
+
+//Event listener for clicking the reset button
+
+resetButton.addEventListener('click', () => {
     missed = 0
     resetLives();
     resetKeyboard();
     resetPhrase();
-};
+    startOverlay.style.display = 'none';
+});
+
