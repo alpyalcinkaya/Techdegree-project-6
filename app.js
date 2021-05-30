@@ -6,6 +6,11 @@ const tries = document.getElementById('scoreboard');
 const startOverlay = document.getElementById('overlay');
 const h2 = document.querySelector('.title');
 const startButton = document.querySelector('a.btn__reset');
+const letters = document.getElementsByClassName('letter');
+const img = document.querySelector('img');
+let ol = tries.firstElementChild;
+let li = ol.children;
+
 
 //initialize missed variable to 0
 
@@ -43,8 +48,9 @@ function getRandomPhraseAsArray(arr){
 
 //setting a game display: addPhraseToDisplay function
 
+const phraseUl = document.querySelector('#phrase ul');
+
 function addPhraseToDisplay(arr){
-    const phraseUl = document.querySelector('#phrase ul');
     for(let i = 0; i < arr.length; i++){
         const li = document.createElement('li')
         li.textContent = arr[i]
@@ -61,9 +67,6 @@ const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray); 
 
 //check letter function
-
-
-const letters = document.getElementsByClassName('letter');
 
 function checkLetter(btn){   
     let letterClicked = btn.textContent.toUpperCase();
@@ -93,7 +96,7 @@ function checkWin(){
         startOverlay.style.display = "flex";
         h2.textContent = "Sorry, you've lost the game..."
     };
-    startButton.textContent = "Start a new game";
+    startButton.textContent = "See results";
 };
 
 //event listener for the keyboard
@@ -105,8 +108,6 @@ qwerty.addEventListener('click', (e) => {
         target.setAttribute("disabled", "true");
         let letterFound = checkLetter(target);
         if (letterFound === false){
-            let ol = tries.firstElementChild;
-            let li = ol.children;
             ol.removeChild(li[0]);
             missed += 1
         };
@@ -114,10 +115,57 @@ qwerty.addEventListener('click', (e) => {
     checkWin();
 });
 
+// Function that resets hearts
+
+function resetLives(){
+    const remainderLives = li.length;
+    for(let i = 0; i < remainderLives; i++){
+        ol.removeChild(li[0])
+    };
+  
+    for(let i = 0; i < 5 ; i++){
+        newHeart = document.createElement('LI');
+        newHeart.className = "tries"; 
+        ol.appendChild(newHeart);
+        li[i].appendChild(img.cloneNode(true))  
+    }; 
+    
+};
 
 
 
+// function that resets keyboard
+
+function resetKeyboard(){
+    const buttons = document.querySelectorAll('button');
+    for(let i = 0; i < buttons.length; i++){
+        if(buttons[i].className === 'chosen'){
+            buttons[i].classList.remove('chosen');
+        };
+        buttons[i].removeAttribute('disabled');
+    };
+
+};
 
 
+//function that resets the phrases
+
+function resetPhrase(){
+    const contents = phraseUl.children
+    const contentsLength = contents.length
+    for (let i = 0; i < contentsLength; i++){
+        phraseUl.removeChild(contents[0]);
+    };
+    let newPhrase = getRandomPhraseAsArray(phrases);
+    addPhraseToDisplay(newPhrase);
+};
 
 
+//Function that resets the entire game;
+
+function resetGame(){
+    missed = 0
+    resetLives();
+    resetKeyboard();
+    resetPhrase();
+};
