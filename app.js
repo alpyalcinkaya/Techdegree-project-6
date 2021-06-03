@@ -170,10 +170,6 @@ function resetPhrase(){
 };
 
 
-//Function that resets the entire game;
-
-
-
 
 //Event listener for clicking the reset button
 
